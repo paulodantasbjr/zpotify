@@ -1,9 +1,13 @@
 import { ReactNode } from 'react'
 
 import Head from 'next/head'
+import { useRouter } from 'next/router'
+
+import { useSession } from 'next-auth/react'
 
 import { SidebarLeft } from './SidebarLeft'
 import { SidebarRight } from './SidebarRight'
+import { Loader } from './Loader'
 
 type Props = {
   children?: ReactNode
@@ -11,6 +15,14 @@ type Props = {
 }
 
 export const Layout = ({ children, title = 'Zpotify - Dashboard' }: Props) => {
+  const router = useRouter()
+  const { status, data: session } = useSession({
+    required: true,
+    onUnauthenticated: () => router.push('/signin'),
+  })
+
+  if (status === 'loading') return <Loader />
+
   return (
     <>
       <Head>

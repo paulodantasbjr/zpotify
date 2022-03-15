@@ -11,7 +11,7 @@ export const Search = ({ search, setSearch }: SearchProps) => {
         type="text"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className="border-none bg-gray-900 text-xs text-white placeholder-gray-100 outline-none focus:ring-0 lg:w-full"
+        className="w-full border-none bg-gray-900 text-xs text-white placeholder-gray-100 outline-none focus:ring-0"
         placeholder="Search..."
       />
     </div>
