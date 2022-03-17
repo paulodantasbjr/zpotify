@@ -21,7 +21,7 @@ type Props = {
 }
 
 const Signin: NextPage<Props> = ({ providers }) => {
-  const { data: session } = useSession()
+  const { status, data: session } = useSession()
   const router = useRouter()
 
   useEffect(() => {
@@ -30,7 +30,7 @@ const Signin: NextPage<Props> = ({ providers }) => {
     }
   }, [router, session])
 
-  if (session) return <Loader />
+  if (status === 'loading') return <Loader />
 
   return (
     <>

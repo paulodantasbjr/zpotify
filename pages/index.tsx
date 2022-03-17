@@ -1,21 +1,33 @@
-import { useState } from 'react'
-
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
+
+import { useSession } from 'next-auth/react'
+
+import SpotifyWebApi from 'spotify-web-api-node'
 
 import { Layout } from '../components/Layout'
-import { Search } from '../components/Search'
+import { Loader } from '../components/Loader'
+import { useEffect } from 'react'
+
+const spotifyApi = new SpotifyWebApi({
+  clientId: process.env.SPOTIFY_CLIENT_ID,
+})
 
 const Home: NextPage = () => {
-  const [search, setSearch] = useState<string>('')
+  const router = useRouter()
+  const { status, data: session } = useSession({
+    required: true,
+    onUnauthenticated: () => router.push('/signin'),
+  })
 
-  return (
-    <Layout title="Zpotify - Dashboard">
-      <section className="ml-24 flex-grow space-y-8 bg-black py-4 md:mr-2.5 md:max-w-6xl">
-        <Search search={search} setSearch={setSearch} />
-        <div className="grid h-96 grid-cols-2 gap-x-4 gap-y-8 overflow-y-scroll py-4 scrollbar-hide xl:grid-cols-4"></div>
-      </section>
-    </Layout>
-  )
+  useEffect(() => {
+    if (session?.accessToken)
+      return spotifyApi.setAccessToken(session?.accessToken as string)
+  }, [session?.accessToken])
+
+  if (status === 'loading') return <Loader />
+
+  return <Layout title="Zpotify - Dashboard" />
 }
 
 export default Home

@@ -1,9 +1,9 @@
-type SearchProps = {
-  search: string
-  setSearch: (search: string) => void
-}
+import { useRecoilState } from 'recoil'
+import { searchAtom } from '../atoms/searchAtom'
 
-export const Search = ({ search, setSearch }: SearchProps) => {
+export const Search = () => {
+  const [search, setSearch] = useRecoilState(searchAtom)
+
   return (
     <div className="flex max-w-6xl items-center overflow-hidden rounded-full border-2 border-gray-700  bg-gray-900 p-1.5 px-5 pr-8">
       <div className="h-4 w-4 flex-shrink-0 animate-pulse rounded-full border-2" />
